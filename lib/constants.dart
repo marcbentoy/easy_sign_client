@@ -10,3 +10,5 @@ const Color kBorderColor = Color(0xffE8EAEC);
 const Color kHeaderColor = Color(0xff2e2e2e);
 const Color kSubHeaderColor = Color(0xff6e6e6e);
 const Color kContentColor = Color(0xff4e4e4e);
+
+const Color kDarkGreen = Color(0xff006D4D);

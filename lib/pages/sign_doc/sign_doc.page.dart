@@ -173,6 +173,10 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(24),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -182,7 +186,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
                     children: [
                       // document header
                       Container(
-                        height: 80,
+                        height: 56,
                         width: double.infinity,
                         decoration: const BoxDecoration(
                             color: kDarkWhite,
@@ -191,10 +195,59 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
                             border: Border(
                                 bottom: BorderSide(color: kBorderColor))),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // document title header
+                              Text(
+                                docs[_selectedDoc].$1,
+                                style: GoogleFonts.inter(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: kHeaderColor,
+                                ),
+                              ),
+
+                              //
+                              const Spacer(),
+
+                              // document status
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4, horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: kGreen.withAlpha(56),
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.check,
+                                      size: 12,
+                                      color: kDarkGreen,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      "SIGNED",
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: kDarkGreen,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //
+                              const SizedBox(
+                                width: 8,
+                              ),
+
                               // document info icon button
                               IconButton(
                                 onPressed: () {
