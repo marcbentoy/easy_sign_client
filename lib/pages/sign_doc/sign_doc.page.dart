@@ -163,7 +163,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: const BoxDecoration(
-              color: kDarkWhite,
+              color: kWhite,
             ),
             // document container
             child: Container(
@@ -173,6 +173,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // document main
                   Expanded(
@@ -206,36 +207,6 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
 
                                 //
                                 const Spacer(),
-
-                                // document status
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    color: kLightGreen,
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.check,
-                                        size: 12,
-                                        color: kDarkGreen,
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      Text(
-                                        "SIGNED",
-                                        style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: kDarkGreen,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
 
                                 //
                                 const SizedBox(
@@ -351,24 +322,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
 
                   // document details
                   _showDocDetails
-                      ? Container(
-                          width: 256,
-                          decoration: const BoxDecoration(
-                            color: kWhite,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                            ),
-                            border: Border(
-                              left: BorderSide(color: kBorder, width: 1),
-                            ),
-                          ),
-                          child: const Column(
-                            children: [
-                              Text("Document details"),
-                            ],
-                          ),
-                        )
+                      ? DocumentDetailsWidget()
                       : const SizedBox.shrink(),
                 ],
               ),
@@ -378,4 +332,360 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
       ],
     );
   }
+}
+
+class DocumentDetailsWidget extends StatelessWidget {
+  const DocumentDetailsWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 256,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        color: kWhite,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        ),
+        border: Border(
+          left: BorderSide(color: kBorder, width: 1),
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // details header
+              Text(
+                "Document details",
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  color: kHeadline,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              //
+              const SizedBox(
+                height: 8,
+              ),
+
+              const DocumentStatusChipWidget(status: DocumentStatus.signed),
+
+              const SizedBox(
+                height: 8,
+              ),
+
+              // title
+              DetailCard(
+                label: "title",
+                content: Text(
+                  "A sample document with a very long title but very short content",
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: kHeadline,
+                  ),
+                  softWrap: true,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+
+              //
+              const SizedBox(
+                height: 8,
+              ),
+
+              // digest
+              DetailCard(
+                label: "digest",
+                content: Column(
+                  children: [
+                    Text(
+                      "0xlkasdf987asdfy9as7dyf98asd7f",
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: kHeadline,
+                      ),
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                controls: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Text("Copy"),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text("Verify"),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                height: 8,
+              ),
+
+              // date uploaded
+              DetailCard(
+                label: "date uploaded",
+                content: Text(
+                  "04.24.2024 10:24 AM",
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: kHeadline,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height: 8,
+              ),
+
+              // date uploaded
+              DetailCard(
+                label: "date signed",
+                content: Text(
+                  "04.24.2024 10:24 PM",
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: kHeadline,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+
+              SizedBox(
+                height: 8,
+              ),
+
+              // uploader
+              DetailCard(
+                label: "uploader",
+                content: Row(
+                  children: [
+                    CircleAvatar(
+                      minRadius: 18,
+                      maxRadius: 18,
+                    ),
+
+                    //
+                    SizedBox(
+                      width: 4,
+                    ),
+
+                    SizedBox(
+                      width: 256 - 32 - 24 - 4 - 36 - 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "User Name I. Lastname",
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: kHeadline,
+                            ),
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "Officer",
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: kHeadline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                controls: TextButton(
+                  onPressed: () {},
+                  child: Text("View Profile"),
+                ),
+              ),
+
+              //
+              SizedBox(
+                height: 8,
+              ),
+
+              // uploader
+              DetailCard(
+                label: "signer",
+                content: Row(
+                  children: [
+                    CircleAvatar(),
+
+                    //
+                    SizedBox(
+                      width: 4,
+                    ),
+
+                    SizedBox(
+                      width: 256 - 32 - 24 - 4 - 36 - 8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "User Name I. Lastname",
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: kHeadline,
+                            ),
+                            softWrap: false,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            "Officer",
+                            style: GoogleFonts.inter(
+                              fontSize: 12,
+                              color: kHeadline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                controls: TextButton(
+                  onPressed: () {},
+                  child: Text("View Profile"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DocumentStatusChipWidget extends StatelessWidget {
+  final DocumentStatus status;
+
+  const DocumentStatusChipWidget({
+    super.key,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      decoration: BoxDecoration(
+        color: kLightGreen,
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.check,
+            size: 12,
+            color: kDarkGreen,
+          ),
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+            status == DocumentStatus.signed
+                ? "SIGNED"
+                : status == DocumentStatus.waiting
+                    ? "WAITING"
+                    : "CANCELLED",
+            style: GoogleFonts.inter(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: kDarkGreen,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DetailCard extends StatelessWidget {
+  final String label;
+  final Widget content;
+  final Widget? controls;
+
+  const DetailCard(
+      {super.key, required this.label, required this.content, this.controls});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: kDarkWhite,
+        border: Border.all(color: kBorder),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // card label
+          Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: kSubHeadline,
+            ),
+          ),
+
+          //
+          SizedBox(
+            height: 8,
+          ),
+
+          // content
+          content,
+
+          controls != null
+              ? Column(
+                  children: [
+                    //
+                    const SizedBox(
+                      height: 8,
+                    ),
+
+                    Divider(
+                      color: kBorder,
+                      thickness: 0.8,
+                    ),
+                    controls!,
+                  ],
+                )
+              : SizedBox.shrink(),
+        ],
+      ),
+    );
+  }
+}
+
+enum DocumentStatus {
+  waiting,
+  cancelled,
+  signed,
 }
