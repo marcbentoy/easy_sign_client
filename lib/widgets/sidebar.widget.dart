@@ -30,7 +30,7 @@ class _CustomSidebarState extends State<CustomSidebar> {
       width: 80,
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        color: kDarkBlue,
+        color: kBlack,
       ),
       child: Column(
         children: [

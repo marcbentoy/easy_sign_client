@@ -1,6 +1,9 @@
 import 'package:easy_sign_client/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
+import '../../widgets/custom_icon_button_widget.dart';
 
 class SignDocumentPage extends StatefulWidget {
   const SignDocumentPage({super.key});
@@ -10,6 +13,10 @@ class SignDocumentPage extends StatefulWidget {
 }
 
 class _SignDocumentPageState extends State<SignDocumentPage> {
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  final PdfViewerController _pdfViewerController = PdfViewerController();
+  double pdfViewZoomLevel = 1;
+
   bool _showDocDetails = true;
   int _selectedDoc = 0;
 
@@ -36,39 +43,21 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
         // document selector
         Container(
           width: 256,
-          color: kDarkWhite,
+          color: kWhite,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // header
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Assigned to you",
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: kHeaderColor,
-                      ),
-                    ),
-                    Text(
-                      "04.13.2024",
-                      style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: kSubHeaderColor,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  "Signature Requests",
+                  style: GoogleFonts.inter(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: kHeadline,
+                  ),
                 ),
-              ),
-
-              //
-              const SizedBox(
-                height: 12,
               ),
 
               // documents list
@@ -111,7 +100,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
                                     docs[index].$1,
                                     style: GoogleFonts.inter(
                                       color: _selectedDoc != index
-                                          ? kHeaderColor
+                                          ? kHeadline
                                           : kWhite,
                                       fontSize: 16,
                                       fontWeight: _selectedDoc != index
@@ -132,8 +121,8 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
                                     docs[_selectedDoc].$2,
                                     style: GoogleFonts.inter(
                                       color: _selectedDoc != index
-                                          ? kHeaderColor.withAlpha(172)
-                                          : kWhite.withAlpha(200),
+                                          ? kHeadline.withAlpha(172)
+                                          : kWhite.withAlpha(220),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -146,8 +135,8 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.w300,
                                       color: _selectedDoc != index
-                                          ? kHeaderColor.withAlpha(172)
-                                          : kWhite.withAlpha(200),
+                                          ? kHeadline.withAlpha(172)
+                                          : kWhite.withAlpha(220),
                                     ),
                                   ),
                                 ],
@@ -173,170 +162,216 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(24),
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+            decoration: const BoxDecoration(
+              color: kDarkWhite,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                // document tools
-                Expanded(
-                  child: Column(
-                    children: [
-                      // document header
-                      Container(
-                        height: 56,
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                            color: kDarkWhite,
-                            borderRadius:
-                                BorderRadius.only(topLeft: Radius.circular(8)),
-                            border: Border(
-                                bottom: BorderSide(color: kBorderColor))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // document title header
-                              Text(
-                                docs[_selectedDoc].$1,
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: kHeaderColor,
+            // document container
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: kBorder),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  // document main
+                  Expanded(
+                    child: Column(
+                      children: [
+                        // document header
+                        Container(
+                          height: 64,
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                              color: kWhite,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8)),
+                              border:
+                                  Border(bottom: BorderSide(color: kBorder))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // document title header
+                                Text(
+                                  docs[_selectedDoc].$1,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: kHeadline,
+                                  ),
                                 ),
-                              ),
 
-                              //
-                              const Spacer(),
+                                //
+                                const Spacer(),
 
-                              // document status
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 4, horizontal: 8),
-                                decoration: BoxDecoration(
-                                  color: kGreen.withAlpha(56),
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      size: 12,
-                                      color: kDarkGreen,
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      "SIGNED",
-                                      style: GoogleFonts.inter(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
+                                // document status
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    color: kLightGreen,
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.check,
+                                        size: 12,
                                         color: kDarkGreen,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        "SIGNED",
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color: kDarkGreen,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
 
-                              //
-                              const SizedBox(
-                                width: 8,
-                              ),
+                                //
+                                const SizedBox(
+                                  width: 8,
+                                ),
 
-                              // document info icon button
-                              IconButton(
-                                onPressed: () {
+                                // document info icon button
+                                CustomIconButtonWidget(
+                                  icon: const Icon(
+                                    Icons.info_rounded,
+                                    color: kStroke,
+                                  ),
+                                  tooltip: "toggle details",
+                                  onClickCallback: () {
+                                    setState(() {
+                                      _showDocDetails = !_showDocDetails;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // pdf controls
+                        Container(
+                          height: 64,
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              CustomIconButtonWidget(
+                                onClickCallback: () {
                                   setState(() {
-                                    _showDocDetails = !_showDocDetails;
+                                    pdfViewZoomLevel -= 0.2;
+                                    _pdfViewerController.zoomLevel =
+                                        pdfViewZoomLevel;
                                   });
                                 },
-                                icon: const Icon(Icons.info_rounded),
+                                icon: Icon(Icons.zoom_out_rounded),
+                                tooltip: "zoom out",
+                              ),
+                              CustomIconButtonWidget(
+                                onClickCallback: () {
+                                  setState(() {
+                                    pdfViewZoomLevel += 0.2;
+                                    _pdfViewerController.zoomLevel =
+                                        pdfViewZoomLevel;
+                                  });
+                                },
+                                icon: Icon(Icons.zoom_in_rounded),
+                                tooltip: "zoom in",
                               ),
                             ],
                           ),
                         ),
-                      ),
 
-                      // document content
-                      Expanded(
-                        child: Container(
+                        // document content
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            color: kDarkestWhite,
+                            child: SfPdfViewer.asset(
+                              "assets/documents/test.pdf",
+                              key: _pdfViewerKey,
+                              controller: _pdfViewerController,
+                            ),
+                          ),
+                        ),
+
+                        // sign document control
+                        Container(
+                          height: 64,
                           width: double.infinity,
-                          color: kDarkestWhite,
-                          child: const Text("Document content"),
-                        ),
-                      ),
-
-                      // sign document control
-                      Container(
-                        height: 64,
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(8),
-                        decoration: const BoxDecoration(
-                            color: kDarkWhite,
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(8)),
-                            border:
-                                Border(top: BorderSide(color: kBorderColor))),
-                        child: FilledButton(
-                          style: ButtonStyle(
-                            shape: MaterialStatePropertyAll(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8))),
-                            backgroundColor:
-                                const MaterialStatePropertyAll(kGreen),
-                          ),
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.border_color_rounded,
-                                size: 16,
-                              ),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              Text(
-                                "Sign Document",
-                                style: GoogleFonts.inter(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                              color: kWhite,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(8)),
+                              border: Border(top: BorderSide(color: kBorder))),
+                          child: FilledButton(
+                            style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8))),
+                              backgroundColor:
+                                  const MaterialStatePropertyAll(kGreen),
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.border_color_rounded,
+                                  size: 16,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  "Sign Document",
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
 
-                // document details
-                _showDocDetails
-                    ? Container(
-                        width: 256,
-                        decoration: const BoxDecoration(
-                            color: kDarkWhite,
+                  // document details
+                  _showDocDetails
+                      ? Container(
+                          width: 256,
+                          decoration: const BoxDecoration(
+                            color: kWhite,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(8),
                               bottomRight: Radius.circular(8),
                             ),
                             border: Border(
-                                left:
-                                    BorderSide(color: kBorderColor, width: 2))),
-                        child: const Column(
-                          children: [
-                            Text("Document details"),
-                          ],
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-              ],
+                              left: BorderSide(color: kBorder, width: 1),
+                            ),
+                          ),
+                          child: const Column(
+                            children: [
+                              Text("Document details"),
+                            ],
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
             ),
           ),
         ),
