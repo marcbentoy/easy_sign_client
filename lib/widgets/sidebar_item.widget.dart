@@ -1,5 +1,8 @@
-import 'package:easy_sign_client/constants.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
+
+import 'package:easy_sign_client/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SidebarItemWidget extends StatefulWidget {
   const SidebarItemWidget({
@@ -24,26 +27,35 @@ class _SidebarItemWidgetState extends State<SidebarItemWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        FilledButton(
-          style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
-            shape: MaterialStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-            backgroundColor: MaterialStatePropertyAll(
-                widget.currentIndex == widget.index
-                    ? kGreen
-                    : Colors.transparent),
+        badges.Badge(
+          badgeContent: Text(
+            "5",
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: kWhite,
+            ),
           ),
-          onPressed: () {
-            widget.onClickCallback(widget.index);
-          },
-          child: SizedBox(
-            height: 48,
-            child: Icon(
-              widget.icon,
-              color: widget.currentIndex == widget.index
-                  ? kWhite
-                  : kWhite.withAlpha(124),
+          child: FilledButton(
+            style: ButtonStyle(
+              padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+              shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8))),
+              backgroundColor: MaterialStatePropertyAll(
+                  widget.currentIndex == widget.index
+                      ? kGreen
+                      : Colors.transparent),
+            ),
+            onPressed: () {
+              widget.onClickCallback(widget.index);
+            },
+            child: SizedBox(
+              height: 48,
+              child: Icon(
+                widget.icon,
+                color: widget.currentIndex == widget.index
+                    ? kWhite
+                    : kWhite.withAlpha(124),
+              ),
             ),
           ),
         ),
