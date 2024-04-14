@@ -43,7 +43,10 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
         // document selector
         Container(
           width: 256,
-          color: kWhite,
+          decoration: BoxDecoration(
+            color: kWhite,
+            border: Border(right: BorderSide(color: kBorder)),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -163,7 +166,7 @@ class _SignDocumentPageState extends State<SignDocumentPage> {
           child: Container(
             padding: const EdgeInsets.all(24),
             decoration: const BoxDecoration(
-              color: kWhite,
+              color: kDarkWhite,
             ),
             // document container
             child: Container(
